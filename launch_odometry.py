@@ -15,14 +15,6 @@ def generate_launch_description():
             arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'base_laser']
         ),
         
-        # === FIX APPLIED HERE: Add Static Transform for the IMU ===
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='base_to_imu_broadcaster',
-            arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'imu_link']
-        ),
-
         # 2. rf2o Laser Odometry Node
         Node(
             package='rf2o_laser_odometry',

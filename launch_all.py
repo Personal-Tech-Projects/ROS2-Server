@@ -19,12 +19,12 @@ def generate_launch_description():
         ),
 
         # 3. Static Transform: Tells the EKF where the IMU is located
-        # Adjust the '0.1' (X offset) and '0.05' (Y offset) based on your physical robot
+        # IMU is at the robot's center, coincident with base_link.
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             name='imu_static_tf',
-            arguments=['0.1', '0.05', '0.0', '0.0', '0.0', '0.0', 'base_link', 'imu_link']
+            arguments=['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', 'base_link', 'imu_link']
         ),
         
         # 4. Start the Odometry and TF tree
