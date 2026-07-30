@@ -6,13 +6,10 @@ from launch_ros.actions import Node  # Added this import
 
 def generate_launch_description():
     return LaunchDescription([
-        # 1. Start the micro-ROS Agent (Your Bridge to the ESP32)
-        Node(
-            package='micro_ros_agent',
-            executable='micro_ros_agent',
-            name='micro_ros_agent',
-            output='screen',
-            arguments=['udp4', '--port', '8888']
+       # 1. Start your custom Python IMU Bridge (Replaces micro-ROS)
+        ExecuteProcess(
+            cmd=['python3', 'imu_bridge.py'],
+            output='screen'
         ),
 
         # 2. Start your custom Python Lidar Bridge
@@ -20,18 +17,27 @@ def generate_launch_description():
             cmd=['python3', 'main.py'],
             output='screen'
         ),
+
+        # 3. Static Transform: Tells the EKF where the IMU is located
+        # Adjust the '0.1' (X offset) and '0.05' (Y offset) based on your physical robot
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='imu_static_tf',
+            arguments=['0.1', '0.05', '0.0', '0.0', '0.0', '0.0', 'base_link', 'imu_link']
+        ),
         
-        # 3. Start the Odometry and TF tree
+        # 4. Start the Odometry and TF tree
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource('launch_odometry.py')
         ),
         
-        # 4. Start SLAM Toolbox
+        # 5. Start SLAM Toolbox
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource('launch_slam.py')
         ),
         
-        # 5. Open RViz visualizer
+        # 6. Open RViz visualizer
         ExecuteProcess(
             cmd=['rviz2'],
             output='screen'

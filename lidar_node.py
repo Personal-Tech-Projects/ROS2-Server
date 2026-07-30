@@ -22,20 +22,20 @@ class LidarBridgeNode(Node):
         raw_packets = self.receiver.get_available_packets()
         
         # 1. Prove the packets are actually entering Python
-        if len(raw_packets) > 0:
-            self.get_logger().info(f"Received {len(raw_packets)} raw UDP packets this cycle.")
+        # if len(raw_packets) > 0:
+            # self.get_logger().info(f"Received {len(raw_packets)} raw UDP packets this cycle.")
         
         for packet in raw_packets:
             points = decode_packet(packet)
             if not points:
                 # 2. Use ROS2 logger instead of invisible print()
-                self.get_logger().warn("Packet rejected by decoder (Bad format/Header/Checksum)")
+                # self.get_logger().warn("Packet rejected by decoder (Bad format/Header/Checksum)")
                 continue
             
             start_angle = points[0][0]
 
             # 3. Print the angle to see if it is spinning backwards
-            self.get_logger().info(f"Decoder Success! Current start angle: {start_angle:.1f}")
+            # self.get_logger().info(f"Decoder Success! Current start angle: {start_angle:.1f}")
 
             # Check if we wrapped around 360 degrees
             if start_angle < 90.0 and self.last_angle > 270.0:
