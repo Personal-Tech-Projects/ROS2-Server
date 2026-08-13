@@ -9,24 +9,28 @@ ekf_filter_node:
     base_link_frame: base_link
     world_frame: odom
 
-    # 1. Odometry from rf2o
+    # Fuse rf2o body-frame linear velocity only; the IMU owns yaw.
+    # rf2o absolute pose and yaw use a noisier, drifting laser frame.
     odom0: /odom_rf2o
-    odom0_config: [true,  true,  false,
+    odom0_config: [false, false, false,
                    false, false, false,
                    true,  true,  false,
                    false, false, false,
                    false, false, false]
     odom0_queue_size: 10
 
-    # 2. IMU from BNO085 (ESP32)
+    # Mahalanobis gate for rf2o scan-matching velocity outliers.
+    odom0_twist_rejection_threshold: 5.0
+
+    # Use the BNO085 for yaw only; its current acceleration payload is unusable.
     imu0: /imu/data
     imu0_config: [false, false, false,
                   false, false, true,
                   false, false, false,
                   false, false, false,
-                  true,  true,  false]
+                  false, false, false]
     imu0_queue_size: 10
     imu0_remove_gravitational_acceleration: false
     print_diagnostics: true
-    debug: false          # set true only briefly — the log file is enormous
+    debug: false          # Verbose; enable only for short diagnostics.
     debug_out_file: /tmp/ekf_debug.txt

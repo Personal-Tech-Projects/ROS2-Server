@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.bak*
+brain/*.log
+current_map.png
+map_metadata.json
+
+None.data
+None.posegraph
+maps/*.data
+maps/*.posegraph
+tools/build/

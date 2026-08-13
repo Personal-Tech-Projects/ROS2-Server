@@ -1,0 +1,14 @@
+[Unit]
+Description=Robot webcam UDP streamer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/jjlav/pi-video-stream
+ExecStart=/usr/bin/python3 /home/jjlav/pi-video-stream/webcam_streamer.py
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target
