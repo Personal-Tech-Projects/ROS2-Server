@@ -1,5 +1,28 @@
 # Investigation log (newest entry on top)
 
+## 2026-08-12: Localization map persistence and saving
+
+- Created `C:\Users\jjlav\robot-maps` and mounted it read/write at
+  `/root/robot-maps` in `robot_brain`.
+- Preserved the pre-existing map artifacts under `robot-maps/legacy`; they are
+  not validated localization maps.
+- Added `save_map.py` and `tools/save-map.ps1`. The command calls SLAM
+  Toolbox's `serialize_map` and `save_map` services, validates all four output
+  files, and refuses to overwrite an existing version.
+- Verified a temporary save produced valid `.posegraph`, `.data`, `.yaml`, and
+  `.pgm` files visible on Windows. The overwrite test failed safely, and the
+  temporary outputs were removed.
+- During the test, IMU remained at 48 packets/s with no decode failures and
+  LiDAR remained at 5-6 scans/s with no rejected frames.
+- RViz was restored without restarting ROS using a direct Docker-to-WSLg X11
+  bridge because the VS Code X11 proxy became stale after container restart.
+
+To save a validated map:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File C:\Users\jjlav\robot-tools\save-map.ps1 home_v1
+```
+
 ## 2026-08-05 — Session 5 (continued): four more root causes found, all measured
 
 Everything below was measured at both ends, not inferred. Several earlier
